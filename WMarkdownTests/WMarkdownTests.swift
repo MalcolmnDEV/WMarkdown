@@ -130,4 +130,17 @@ Hello, **Swift** readers!
         let markdown = text.markdown
         XCTAssertEqual(expectedMarkdown, markdown)
     }
+
+    func testHelpline() throws {
+        let text = """
+  1. Call 911 if you\'re having an emergency, or if you\'re just not sure who else to call\n2. Call or text 988 to talk to a free, confidential counselor from the Suicide & Crisis Lifeline (available 24/7 and in Spanish). Or visit https://988lifeline.org/\n3. Contact 1-800-799-7233 to reach the National Domestic Violence hotline. They can help if you\'re at risk of harm from a partner, family member, or acquaintance. Or visit https://www.thehotline.org/help/ to chat online with an advocate
+"""
+
+        let expectedMarkdown = """
+  1. Call [911](tel:911) if you\'re having an emergency, or if you\'re just not sure who else to call\n2. Call or text [988](tel:988) to talk to a free, confidential counselor from the Suicide & Crisis Lifeline (available 24/7 and in Spanish). Or visit [https://988lifeline.org/](https://988lifeline.org/)\n3. Contact [1-800-799-7233](tel:1-800-799-7233) to reach the National Domestic Violence hotline. They can help if you\'re at risk of harm from a partner, family member, or acquaintance. Or visit [https://www.thehotline.org/help/](https://www.thehotline.org/help/) to chat online with an advocate
+"""
+
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
+    }
 }

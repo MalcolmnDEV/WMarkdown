@@ -56,6 +56,16 @@ public enum MarkType: CaseIterable {
         case .emergency: return MarkRegex.emergencyPattern
         }
     }
+
+    var action: String {
+        switch self {
+        case .url: return ""
+        case .email: return "mailto:"
+        case .phone: return "tel:"
+        case .sms: return "sms:"
+        case .emergency: return "tel:"
+        }
+    }
 }
 
 extension MarkType: Hashable, Equatable {

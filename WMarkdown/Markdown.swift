@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum MarkdownConvertions: CaseIterable {
     case heading1
@@ -94,45 +95,64 @@ struct Markdown {
                         .replacingOccurrences(of: textFormattingTag.closingTag, with: textFormattingTag.markdownClosingTag)
                 }
 
-        let linkConvertedString = parseTextAndExtractElements(markdownAsString)
+        let linkConvertedString = convertTextToMarkdown(markdownAsString)
         return linkConvertedString
     }
 
-    /// Use regex
-    private static func parseTextAndExtractElements(_ text: String) -> String {
-        var textString = text
-        let textLength = textString.utf16.count
-        let textRange = NSRange(location: 0, length: textLength)
+    static func convertTextToMarkdown(_ input: String) -> String {
+        var markdownString = input
+        let textRange = NSRange(location: 0, length: input.utf16.count)
 
-        let tuples = MarkdownBuilder.getAllElements(from: textString, range: textRange)
-        for tuple in tuples {
-            switch tuple.type {
-            case .url:
-                textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](\(tuple.element.text))")
-            case .email:
-                textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](mailto:\(tuple.element.text))")
-            case .phone, .sms, .emergency:
-                textString = replaceTextWithPhoneNumber(textString, tupleText: tuple.element.text, markType: tuple.type)
+        let linkDetector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let linkMatches = linkDetector?.matches(in: markdownString, options: [], range: NSRange(location: 0, length: markdownString.utf16.count))
+
+        for match in linkMatches?.reversed() ?? [] {
+            if let range = Range(match.range, in: markdownString) {
+                let linkURL = markdownString[range]
+                let markdownLink = "[\(linkURL)](\(linkURL))"
+                markdownString = markdownString.replacingCharacters(in: range, with: markdownLink)
             }
         }
 
-        return textString
-    }
+        let matches = MarkdownBuilder.getAllElements(from: markdownString, range: textRange)
 
-    private static func replaceTextWithPhoneNumber(_ text: String, tupleText: String ,markType: MarkType) -> String {
-        if text.isURL { return text }
+        for match in matches.reversed() {
+            if let range = Range(match.range, in: markdownString) {
+                switch match.type {
+                case .url:
+                    continue
+                case .email:
 
-        switch markType {
-        case .url, .email:
-            return text
-        case .phone:
-            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](tel:\(tupleText))")
-        case .sms:
-            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](sms:\(tupleText))")
-        case .emergency:
-            // here to check for SAFE and TALK
-            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](tel:\(convertPhoneNumberToNumbers(tupleText)))")
+                    let markdownLink = "[\(match.element.text)](\(match.type.action)\(match.element.text))"
+                    markdownString = markdownString.replacingCharacters(in: range, with: markdownLink)
+                    
+                case .phone, .sms:
+
+                    let markdownLink = "[\(match.element.text)](\(match.type.action)\(convertPhoneNumberToNumbers(match.element.text)))"
+                    markdownString = markdownString.replacingOccurrences(of: match.element.text, with: markdownLink)
+
+                case .emergency:
+
+                    let previousIndex = markdownString.index(range.lowerBound, offsetBy: -1)
+                    let nextIndex = markdownString.index(range.upperBound, offsetBy: 0)
+
+                    if previousIndex >= markdownString.startIndex && nextIndex < markdownString.endIndex {
+                        let leftCharacter = markdownString[previousIndex]
+                        let rightCharacter = markdownString[nextIndex]
+
+                        if leftCharacter.isWhitespace && rightCharacter.isWhitespace {
+                            let markdownLink = "[\(match.element.text)](\(match.type.action)\(convertPhoneNumberToNumbers(match.element.text)))"
+                            markdownString = markdownString.replacingCharacters(in: range, with: markdownLink)
+                        }
+                    } else {
+                        let markdownLink = "[\(match.element.text)](\(match.type.action)\(convertPhoneNumberToNumbers(match.element.text)))"
+                        markdownString = markdownString.replacingCharacters(in: range, with: markdownLink)
+                    }
+                }
+            }
         }
+
+        return markdownString
     }
 
     private static func convertPhoneNumberToNumbers(_ phoneNumber: String) -> String {
@@ -168,11 +188,5 @@ struct Markdown {
 extension String {
     var isNumeric: Bool {
         return !(self.isEmpty) && self.allSatisfy { $0.isNumber }
-    }
-
-    var isURL: Bool {
-        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let matches = detector.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
-        return matches.count > 0
     }
 }
