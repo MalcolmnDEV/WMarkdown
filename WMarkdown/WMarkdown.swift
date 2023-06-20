@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    var markdown: String {
+    public var markdown: String {
         return Markdown.toMarkdown(from: self)
     }
 }
