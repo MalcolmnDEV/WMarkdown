@@ -111,17 +111,28 @@ struct Markdown {
                 textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](\(tuple.element.text))")
             case .email:
                 textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](mailto:\(tuple.element.text))")
-            case .phone:
-                textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](tel:\(tuple.element.text))")
-            case .sms:
-                textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](sms:\(tuple.element.text))")
-            case .emergency:
-                // here to check for SAFE and TALK
-                textString = textString.replacingOccurrences(of: tuple.element.text, with: "[\(tuple.element.text)](tel:\(convertPhoneNumberToNumbers(tuple.element.text)))")
+            case .phone, .sms, .emergency:
+                textString = replaceTextWithPhoneNumber(textString, tupleText: tuple.element.text, markType: tuple.type)
             }
         }
 
         return textString
+    }
+
+    private static func replaceTextWithPhoneNumber(_ text: String, tupleText: String ,markType: MarkType) -> String {
+        if text.isURL { return text }
+
+        switch markType {
+        case .url, .email:
+            return text
+        case .phone:
+            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](tel:\(tupleText))")
+        case .sms:
+            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](sms:\(tupleText))")
+        case .emergency:
+            // here to check for SAFE and TALK
+            return text.replacingOccurrences(of: tupleText, with: "[\(tupleText)](tel:\(convertPhoneNumberToNumbers(tupleText)))")
+        }
     }
 
     private static func convertPhoneNumberToNumbers(_ phoneNumber: String) -> String {
@@ -155,7 +166,13 @@ struct Markdown {
 }
 
 extension String {
-   var isNumeric: Bool {
-     return !(self.isEmpty) && self.allSatisfy { $0.isNumber }
-   }
+    var isNumeric: Bool {
+        return !(self.isEmpty) && self.allSatisfy { $0.isNumber }
+    }
+
+    var isURL: Bool {
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let matches = detector.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
+        return matches.count > 0
+    }
 }

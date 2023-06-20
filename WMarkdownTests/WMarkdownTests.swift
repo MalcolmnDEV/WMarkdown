@@ -4,79 +4,79 @@ import XCTest
 final class WMarkdownTests: XCTestCase {
 
     func testBold() throws {
-        let textOne = "<b>This Is Bold</b>"
-        let expectedMarkdownOne = "**This Is Bold**"
+        let text = "<b>This Is Bold</b>"
+        let expectedMarkdown = "**This Is Bold**"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testItalic() throws {
-        let textOne = "<i>italic text</i>"
-        let expectedMarkdownOne = "*italic text*"
+        let text = "<i>italic text</i>"
+        let expectedMarkdown = "*italic text*"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testHeading1() throws {
-        let textOne = "<h1>Heading 1</h1>"
-        let expectedMarkdownOne = "# Heading 1"
+        let text = "<h1>Heading 1</h1>"
+        let expectedMarkdown = "# Heading 1"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testHeading2() throws {
-        let textOne = "<h2>Heading 2</h2>"
-        let expectedMarkdownOne = "## Heading 2"
+        let text = "<h2>Heading 2</h2>"
+        let expectedMarkdown = "## Heading 2"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testUnorderedList() throws {
-        let textOne = "<ul><li>Item 1</li></ul>"
-        let expectedMarkdownOne = "- Item 1"
+        let text = "<ul><li>Item 1</li></ul>"
+        let expectedMarkdown = "- Item 1"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testBullet() throws {
-        let textOne = "<ol><li>Item 1</li></ol>"
-        let expectedMarkdownOne = "1. Item 1"
+        let text = "<ol><li>Item 1</li></ol>"
+        let expectedMarkdown = "1. Item 1"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testPhoneNumber() throws {
-        let textOne = "Call 1-800-799-7233"
-        let expectedMarkdownOne = "Call [1-800-799-7233](tel:1-800-799-7233)"
+        let text = "Call 1-800-799-7233"
+        let expectedMarkdown = "Call [1-800-799-7233](tel:1-800-799-7233)"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testSMS() throws {
-        let textOne = "Text 741741"
-        let expectedMarkdownOne = "Text [741741](sms:741741)"
+        let text = "Text 741741"
+        let expectedMarkdown = "Text [741741](sms:741741)"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testLink() throws {
-        let textOne = "Visit Apple: https://apple.com"
-        let expectedMarkdownOne = "Visit Apple: [https://apple.com](https://apple.com)"
+        let text = "Visit Apple: https://apple.com"
+        let expectedMarkdown = "Visit Apple: [https://apple.com](https://apple.com)"
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testLargeConverstion() throws {
-        let textOne = """
+        let text = """
 Hello, <b>Swift</b> readers!
 
     We can make text <i>italic</i>, ***bold italic***, or ~~striked through~~.
@@ -84,7 +84,7 @@ Hello, <b>Swift</b> readers!
     You can even create test links https://www.twitter.com that actually work.
 """
 
-        let expectedMarkdownOne = """
+        let expectedMarkdown = """
 Hello, **Swift** readers!
 
     We can make text *italic*, ***bold italic***, or ~~striked through~~.
@@ -92,8 +92,8 @@ Hello, **Swift** readers!
     You can even create test links [https://www.twitter.com](https://www.twitter.com) that actually work.
 """
 
-        let markdownOne = textOne.markdown
-        XCTAssertEqual(expectedMarkdownOne, markdownOne)
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 
     func testEmergency() throws {
@@ -105,8 +105,8 @@ Hello, **Swift** readers!
         let expectedMarkdown2 = "Call [112](tel:112)"
         let markdown2 = text2.markdown
 
-        let text3 = "Call 988"
-        let expectedMarkdown3 = "Call [988](tel:988)"
+        let text3 = "Call or text 988"
+        let expectedMarkdown3 = "Call or text [988](tel:988)"
         let markdown3 = text3.markdown
 
         let text4 = "Call 1-800-799-SAFE"
@@ -122,5 +122,12 @@ Hello, **Swift** readers!
         XCTAssertEqual(expectedMarkdown3, markdown3)
         XCTAssertEqual(expectedMarkdown4, markdown4)
         XCTAssertEqual(expectedMarkdown5, markdown5)
+    }
+
+    func testNumberAndLink() throws {
+        let text = "visit https://988lifeline.org/"
+        let expectedMarkdown = "visit [https://988lifeline.org/](https://988lifeline.org/)"
+        let markdown = text.markdown
+        XCTAssertEqual(expectedMarkdown, markdown)
     }
 }
