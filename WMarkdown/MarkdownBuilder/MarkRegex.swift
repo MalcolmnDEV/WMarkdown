@@ -14,7 +14,7 @@ struct MarkRegex {
         "((https?://|www\\.|pic\\.)[-\\w;/?:@&=+$\\|\\_.!~*\\|'()\\[\\]%#,☺]+[\\w/#](\\(\\))?)" +
     "(?=$|[\\s',\\|\\(\\).:;?\\-\\[\\]>\\)])"
     static let phonePattern = "([+]?1+[-]?)?+([(]?+([0-9]{3})?+[)]?)?+[-]?+[0-9]{3}+[-]?+[0-9]{4}"
-    static let smsPattern = "(8009444773|9714200294|741741)"
+    static let smsPattern = "(8009444773|9714200294|741741|22522|678678|233733)"
     static let emergencyPattern = "(911|112|1-800-799-SAFE|1-800-273-TALK|988)"
 
     private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
