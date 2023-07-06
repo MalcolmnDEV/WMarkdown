@@ -11,8 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build
-        run: swift build
-      - name: Run tests
-        run: swift test
+      - name: List available devices
+        run: xcrun simctl list devicetypes 
+      - name: Build and run tests
+        run: xcodebuild test -scheme WMarkdown -destination 'platform=iOS Simulator,name=iPhone 14 Pro'
 
