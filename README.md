@@ -22,7 +22,7 @@ Simply add the package dependency to your Package.swift:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/MalcolmnDEV/WMarkdown", from: "0.1.6"),
+    .package(url: "https://github.com/MalcolmnDEV/WMarkdown", from: "0.1.7"),
 ]
 ```
 

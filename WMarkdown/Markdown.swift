@@ -109,7 +109,7 @@ struct Markdown {
         for match in linkMatches?.reversed() ?? [] {
             if let range = Range(match.range, in: markdownString) {
                 let linkURL = markdownString[range]
-                let markdownLink = "[\(linkURL)](\(linkURL))"
+                let markdownLink = "[\(linkURL.replacingOccurrences(of: "**", with: ""))](\(linkURL.replacingOccurrences(of: "**", with: "")))"
                 markdownString = markdownString.replacingCharacters(in: range, with: markdownLink)
             }
         }
