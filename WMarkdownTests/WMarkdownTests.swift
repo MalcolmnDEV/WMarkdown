@@ -143,4 +143,25 @@ Hello, **Swift** readers!
         let markdown = text.markdown
         XCTAssertEqual(expectedMarkdown, markdown)
     }
+
+    func testBoldItalicTempFixConverstion() throws {
+        let text = """
+Hello, *Swift* readers! Hello2, **Swift**! Hello3, <b>Swift</b>!
+
+    We can make text <i>italic</i>, ***bold italic***, or ~~striked through~~.
+
+    You can even create test links https://www.twitter.com that actually work.
+"""
+
+        let expectedMarkdown = """
+Hello, **Swift** readers! Hello2, **Swift**! Hello3, **Swift**!
+
+    We can make text *italic*, ***bold italic***, or ~~striked through~~.
+
+    You can even create test links [https://www.twitter.com](https://www.twitter.com) that actually work.
+"""
+
+        let markdown = text.markdownWithPrelim
+        XCTAssertEqual(expectedMarkdown, markdown)
+    }
 }
