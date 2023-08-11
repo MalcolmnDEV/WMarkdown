@@ -24,10 +24,14 @@ extension String {
 
         for char in input {
             if char == "*" {
-                if let prevChar = prevChar, prevChar != "*", let nextChar = input.dropFirst().first, nextChar != "*" {
+                if prevChar == nil {
                     convertedText.append("**")
                 } else {
-                    convertedText.append(char)
+                    if let prevChar = prevChar, prevChar != "*", let nextChar = input.dropFirst().first, nextChar != "*" {
+                        convertedText.append("**")
+                    } else {
+                        convertedText.append(char)
+                    }
                 }
             } else {
                 convertedText.append(char)
