@@ -185,4 +185,18 @@ But to get the most benefit, I *need* you to do something...
     private func convertText(_ text: String) -> String {
         return text.markdownWithPrelim
     }
+
+    func testDesignControlNumbers() throws {
+        let text = "The National Domestic Abuse Helpline (US):\nhttps://www.thehotline.org - online anonymous chat \n1-800-799-7233 or 1-800-787-3224 (TTY)"
+        let expectedMarkdown = "The National Domestic Abuse Helpline (US):\n[https://www.thehotline.org](https://www.thehotline.org) - online anonymous chat \n[1-800-799-7233](tel:1-800-799-7233) or [1-800-787-3224](tel:1-800-787-3224) (TTY)"
+        let markdown = self.convertText(text)
+        XCTAssertEqual(expectedMarkdown, markdown)
+    }
+
+    func testDesignControlNumbersUS() throws {
+        let text = "The Family Advocacy Network: 1-800-924-2624"
+        let expectedMarkdown = "The Family Advocacy Network: [1-800-924-2624](tel:1-800-924-2624)"
+        let markdown = self.convertText(text)
+        XCTAssertEqual(expectedMarkdown, markdown)
+    }
 }
