@@ -26,6 +26,10 @@ dependencies: [
 ]
 ```
 
+## Fastlane
+- Unit Test support
+
+
 ## Versioning
 
 This Package adheres to [semantic versioning](https://semver.org).
