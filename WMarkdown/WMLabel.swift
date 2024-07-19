@@ -8,11 +8,20 @@
 import UIKit
 import SwiftUI
 
-public class WMLabel<Content: View>: UILabel {
-    private var hostingController: UIHostingController<Content>?
+public class WMLabel: UILabel {
+    private var hostingController: UIHostingController<WMLabelView>?
 
-    public init(overlayView: Content) {
+    public init (
+        text: String,
+        foregroundColor: UIColor
+    ) {
         super.init(frame: .zero)
+        
+        let markdownWithPrelim = text.markdownWithPrelim
+        let overlayView = WMLabelView(
+            text: markdownWithPrelim,
+            foregroundColor: Color(uiColor: foregroundColor)
+        )
         setupHostingController(with: overlayView)
     }
 
@@ -20,16 +29,16 @@ public class WMLabel<Content: View>: UILabel {
         super.init(coder: coder)
     }
 
-    private func setupHostingController(with overlayView: Content) {
-        // Create a UIHostingController with the SwiftUI view
+    private func setupHostingController(with overlayView: WMLabelView) {
+        // create a UIHostingController with the SwiftUI view
         hostingController = UIHostingController(rootView: overlayView)
 
         guard let hostingController = hostingController else { return }
 
-        // Add the hosting controller's view as a subview
+        // add the hosting controller's view as a subview
         addSubview(hostingController.view)
 
-        // Setup constraints
+        // setup constraints
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             hostingController.view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -39,61 +48,6 @@ public class WMLabel<Content: View>: UILabel {
         ])
     }
 }
-
-//public class WMLabel: UILabel {
-//
-//    // MARK: - Initializations
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//    }
-//
-//    public init(
-//        frame: CGRect,
-//        text: String,
-//        foregroundColor: UIColor
-//    ) {
-//        super.init(frame: frame)
-//        setup(
-//            text: text,
-//            foregroundColor: foregroundColor
-//        )
-//    }
-//
-//    private func setup(
-//        text: String,
-//        foregroundColor: UIColor
-//    ) {
-//        textAlignment = .center
-//        translatesAutoresizingMaskIntoConstraints = false
-//
-//        addSwiftUIOverlay(
-//            text: text,
-//            foregroundColor: foregroundColor
-//        )
-//    }
-//
-//    private func addSwiftUIOverlay(
-//        text: String,
-//        foregroundColor: UIColor
-//    ) {
-//
-//        let markdownWithPrelim = text.markdownWithPrelim
-//        let overlayView = WMLabelView(
-//            text: markdownWithPrelim,
-//            foregroundColor: Color(uiColor: foregroundColor)
-//        )
-//        let hostingController = UIHostingController(rootView: overlayView)
-//        addSubview(hostingController.view)
-//
-//        // ensure the SwiftUI view covers the UILabel
-//        NSLayoutConstraint.activate([
-//            hostingController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            hostingController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            hostingController.view.topAnchor.constraint(equalTo: topAnchor),
-//            hostingController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        ])
-//    }
-//}
 
 struct WMLabelView: View {
     var text: String
