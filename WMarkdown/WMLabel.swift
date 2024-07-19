@@ -49,7 +49,7 @@ public class WMLabel: UILabel {
     }
 }
 
-struct WMLabelView: View {
+fileprivate struct WMLabelView: View {
     var text: String
     var foregroundColor: Color
     var body: some View {
