@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-class WMLabel: UILabel {
+public class WMLabel: UILabel {
 
     // MARK: - Initializations
     required init?(coder: NSCoder) {
