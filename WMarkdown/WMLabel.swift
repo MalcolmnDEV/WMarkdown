@@ -11,7 +11,7 @@ import SwiftUI
 public class WMLabel<Content: View>: UILabel {
     private var hostingController: UIHostingController<Content>?
 
-    init(overlayView: Content) {
+    public init(overlayView: Content) {
         super.init(frame: .zero)
         setupHostingController(with: overlayView)
     }
