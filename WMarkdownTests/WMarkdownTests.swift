@@ -199,4 +199,11 @@ But to get the most benefit, I *need* you to do something...
         let markdown = self.convertText(text)
         XCTAssertEqual(expectedMarkdown, markdown)
     }
+
+    func testWhiteRibbonAltAUS() throws {
+        let text = "The White Ribbon Alternative: 1880-RESPECT"
+        let expectedMarkdown = "The White Ribbon Alternative: [1880-RESPECT](tel:18807377328)"
+        let markdown = self.convertText(text)
+        XCTAssertEqual(expectedMarkdown, markdown)
+    }
 }
