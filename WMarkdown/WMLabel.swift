@@ -13,14 +13,20 @@ public class WMLabel: UILabel {
 
     public init (
         text: String,
-        foregroundColor: UIColor
+        foregroundColor: UIColor,
+        alignment: TextAlignment = .leading,
+        backgroundColor: UIColor = .clear,
+        tint: Color
     ) {
         super.init(frame: .zero)
         
         let markdownWithPrelim = text.markdownWithPrelim
         let overlayView = WMLabelView(
             text: markdownWithPrelim,
-            foregroundColor: Color(uiColor: foregroundColor)
+            foregroundColor: Color(uiColor: foregroundColor),
+            alignment: alignment,
+            backgroundColor: Color(uiColor: backgroundColor), 
+            tint: tint
         )
         setupHostingController(with: overlayView)
     }
@@ -52,14 +58,21 @@ public class WMLabel: UILabel {
 fileprivate struct WMLabelView: View {
     var text: String
     var foregroundColor: Color
+    var alignment: TextAlignment = .leading
+    var backgroundColor: Color = .clear
+    var tint: Color
+
     var body: some View {
         Text(.init(text))
             .padding()
-            .background(Color.clear)
+            .multilineTextAlignment(alignment)
+            .background(backgroundColor)
             .foregroundStyle(foregroundColor)
+            .tint(tint)
+            .cornerRadius(8)
     }
 }
 
 #Preview {
-    WMLabelView(text: "Hello", foregroundColor: .red)
+    WMLabelView(text: "Hello", foregroundColor: .red, tint: .green)
 }
